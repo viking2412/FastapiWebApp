@@ -13,7 +13,6 @@ async def signup(user: UserCreate, db: CurrentDB):
     token = create_token(user.id)
     return {"token": token}
 
-
 @router.post("/login")
 async def login(user: UserLogin, db: CurrentDB):
     token = await authenticate_user(db, user.email, user.password)
