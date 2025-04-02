@@ -1,6 +1,6 @@
 import jwt
 import bcrypt
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 
 SECRET_KEY = "your_secret_key"
 
@@ -11,7 +11,7 @@ def verify_password(password: str, hashed_password: str) -> bool:
     return bcrypt.checkpw(password.encode(), hashed_password.encode())
 
 def create_token(user_id: int) -> str:
-    payload = {"sub": str(user_id), "exp": datetime.now() + timedelta(hours=1)}
+    payload = {"sub": str(user_id), "exp": datetime.now(tz=UTC) + timedelta(hours=1)}
     return jwt.encode(payload, SECRET_KEY, algorithm="HS256")
 
 def decode_token(token: str) -> int:

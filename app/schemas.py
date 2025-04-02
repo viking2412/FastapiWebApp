@@ -13,6 +13,6 @@ class PostCreate(BaseModel):
     text: str
 
 class PostResponse(BaseModel):
-    id: int
+    post_id: int
     text: str
     user_id: int

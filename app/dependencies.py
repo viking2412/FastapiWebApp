@@ -6,9 +6,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth import decode_token
 from app import models
-from app.database import get_db
+from app.database import SessionLocal
 
 oauth_bearer = OAuth2PasswordBearer("/signin")
+
+async def get_db():
+    async with SessionLocal() as session:
+        yield session
 
 async def get_user(token: str = Depends(oauth_bearer), db: AsyncSession = Depends(get_db)):
     user_id = decode_token(token)
@@ -27,3 +31,5 @@ async def get_post(post_id: int, user: models.User = Depends(get_user), db: Asyn
     return post
 
 CurrentUser = Annotated[models.User, Depends(get_user)]
+CurrentPost = Annotated[models.Post, Depends(get_post)]
+CurrentDB = Annotated[AsyncSession, Depends(get_db)]
